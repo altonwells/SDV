@@ -282,7 +282,7 @@ class SingleTableMetadata:
                 sdtype = 'datetime'
 
         except Exception:
-            if len(data) <= 10:
+            if len(data) <= 5:
                 sdtype = 'categorical'
             else:
                 unique_values = data.nunique()
