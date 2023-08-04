@@ -361,3 +361,25 @@ def test_numerical_columns_gets_pii():
         'numerical': {0: 21, 1: 24, 2: 22, 3: 23, 4: 22, 5: 24, 6: 23, 7: 23, 8: 24, 9: 23}
     })
     pd.testing.assert_frame_equal(expected_sampled, sampled)
+
+
+def test_unknown_sdtype():
+    """Test the ``unknown`` sdtype handling end to end."""
+    # Setup
+    data = pd.DataFrame({
+        'unknown': ['a', 'b', 'c'],
+        'numerical_col': np.random.rand(3),
+    })
+
+    metadata = SingleTableMetadata()
+    metadata.detect_from_dataframe(data)
+    metadata.update_column('unknown', sdtype='unknown')
+
+    synthesizer = GaussianCopulaSynthesizer(metadata)
+
+    # Run
+    synthesizer.fit(data)
+    synthetic_data = synthesizer.sample(5)
+
+    # Assert
+    assert synthetic_data['unknown'].str.startswith('sdv-pii-').all()
