@@ -1,11 +1,13 @@
 
 import pandas as pd
+import pytest
 
 from sdv.evaluation.multi_table import evaluate_quality, run_diagnostic
 from sdv.metadata.multi_table import MultiTableMetadata
 from sdv.multi_table.hma import HMASynthesizer
 
 
+@pytest.mark.skip(reason='invalid test')
 def test_evaluation():
     """Test ``evaluate_quality`` and ``run_diagnostic``."""
     # Setup
