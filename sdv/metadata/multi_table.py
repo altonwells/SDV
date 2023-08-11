@@ -14,7 +14,7 @@ from sdv.metadata.metadata_upgrader import convert_metadata
 from sdv.metadata.single_table import SingleTableMetadata
 from sdv.metadata.utils import read_json, validate_file_does_not_exist
 from sdv.metadata.visualization import visualize_graph
-from sdv.utils import cast_to_iterable
+from sdv.utils import cast_to_iterable, load_data_from_csv
 
 LOGGER = logging.getLogger(__name__)
 
@@ -370,7 +370,8 @@ class MultiTableMetadata:
         """
         self._validate_table_not_detected(table_name)
         table = SingleTableMetadata()
-        table.detect_from_csv(filepath)
+        data = load_data_from_csv(filepath)
+        table._detect_columns(data)
         self.tables[table_name] = table
         self._log_detected_table(table)
 
